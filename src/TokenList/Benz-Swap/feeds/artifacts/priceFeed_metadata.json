@@ -1,0 +1,141 @@
+{
+	"compiler": {
+		"version": "0.8.21+commit.d9974bed"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract ISupraSValueFeed",
+						"name": "_sValueFeed",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint64",
+						"name": "baseIndex",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "quoteIndex",
+						"type": "uint64"
+					}
+				],
+				"name": "getExchangeRate",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRounds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "price",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rounds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Benz-Swap/feeds/PriceApi.sol": "priceFeed"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Benz-Swap/feeds/PriceApi.sol": {
+			"keccak256": "0x276ccda5fedb1a8f0db00738e32e298a4099ad44180c767e35152cf9a59afc01",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://91b0efefd0d99131483f57d1b69c4467e4472fa1a280c005319ecc01af38cbcc",
+				"dweb:/ipfs/QmRLA1KgUcBPAPjCPNGFiYQgCoqhMHF8BdC1JVZHrTioYM"
+			]
+		},
+		"Benz-Swap/interfaces/ISupraSValueFeed.sol": {
+			"keccak256": "0xfe55141c6ced13fe1b667d36f3bbfe3dc261f992faf534b355a3ac0fb90ac1dc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://93d5785e308a3bae3d18c830432e4a4fb2b81f0152d9f3fbbd11418ce759a9ff",
+				"dweb:/ipfs/QmPbtPKEihqXSzbFKZR8ogcLKMTvsujhtvPZAvpgxHvhsV"
+			]
+		}
+	},
+	"version": 1
+}
