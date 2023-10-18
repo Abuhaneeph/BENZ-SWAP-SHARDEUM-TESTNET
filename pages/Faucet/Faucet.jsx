@@ -1,11 +1,14 @@
 import React, { useState,useContext } from 'react'
-
+import ReactDOM from 'react-dom/client'
 import {Input,Button, Radio, Modal, message } from "antd";
 import FaucetModal from '../../src/components/FaucetModal/FaucetModal';
 import { UserContext2 } from '../../ContextProvider/ContextProvider2';
 import { addTokenToMetamask } from '../../utils/constants';
 import { ContractInstances } from '../../ContextProvider/ContractInstanceProvider';
 import { useAddress } from '@thirdweb-dev/react';
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
 const Faucet = () => {
   const address = useAddress()
   const{faucetToken}=useContext(UserContext2)
@@ -98,3 +101,5 @@ addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.d
 }
 
 export default Faucet
+
+)
