@@ -13,7 +13,7 @@ import Loading from './components/Loading/Loading';
 import { UserContext } from '../ContextProvider/ContextProvider';
 import LiquidityHome from '../pages/Liquidity/LiquidityHome';
 import Pool from '../pages/Pools/Pool';
-import Orders from '../pages/Orders/Orders';
+
 import './App.css'
 function App() {
  const{loading,setLoading}=useContext(UserContext)
@@ -41,7 +41,7 @@ function App() {
         
           <Route path='/' index element={<Home/>} />
           
-          <Route path='/orders' element={<Orders/>}/>
+       
           <Route path="/p2p" element={<Peer/>} />
 
           <Route path="/faucet" element={<Faucet/>} />
