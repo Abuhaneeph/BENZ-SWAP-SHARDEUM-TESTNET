@@ -8,7 +8,7 @@ import { ContractInstances } from '../../ContextProvider/ContractInstanceProvide
 import { useAddress } from '@thirdweb-dev/react';
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+
 const Faucet = () => {
   const address = useAddress()
   const{faucetToken}=useContext(UserContext2)
@@ -102,4 +102,3 @@ addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.d
 
 export default Faucet
 
-)
