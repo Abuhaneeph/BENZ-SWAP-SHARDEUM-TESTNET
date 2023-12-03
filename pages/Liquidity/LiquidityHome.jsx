@@ -2,7 +2,7 @@ import React from 'react'
 import Liquidity from '../../src/components/Liquidity/Liquidity'
 const LiquidityHome = () => {
   return (
-    <div>
+    <div className='w3-display-middle'>
        <Liquidity/>
     </div>
   )

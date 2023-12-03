@@ -5,9 +5,10 @@ import {
   DownOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import TokenList from '../../TokenList/tokenList'
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import { UserContext2 } from '../../../ContextProvider/ContextProvider2';
 const P2P = () => {
+  const {TokenList} = useTokenService()
   const{modifyP2P,peerToken,openP2PModal,isP2PModal,setOpenP2PModal}=useContext(UserContext2)
   return (
     <div> 

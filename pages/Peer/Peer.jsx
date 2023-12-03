@@ -5,7 +5,10 @@ const Peer = () => {
  
   return (
 <>
+<div className='w3-display-middle'>
 <P2PIndex/>
+</div>
+
 </>
    
 

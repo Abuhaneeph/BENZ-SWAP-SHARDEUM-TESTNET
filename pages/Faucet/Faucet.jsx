@@ -1,23 +1,43 @@
-import React, { useState,useContext } from 'react'
-import ReactDOM from 'react-dom/client'
-import {Input,Button, Radio, Modal, message } from "antd";
+import React, { useState,useContext,useEffect } from 'react'
+
+import {Input,Button } from "antd";
 import FaucetModal from '../../src/components/FaucetModal/FaucetModal';
 import { UserContext2 } from '../../ContextProvider/ContextProvider2';
 import { addTokenToMetamask } from '../../utils/constants';
 import { ContractInstances } from '../../ContextProvider/ContractInstanceProvider';
 import { useAddress } from '@thirdweb-dev/react';
+import { roundToTwoDecimalPlaces } from '../../utils/constants';
 
 
 
 const Faucet = () => {
   const address = useAddress()
   const{faucetToken}=useContext(UserContext2)
-  const[faucetAmount,setFaucetAmount]=useState(null)
-  const{TEST_TOKEN_CONTRACT_INSTANCE}=useContext(ContractInstances)
-   const[isFaucet,setFaucet]=useState(false)
-const AddToMetamask=async()=>{
+   const[Bal,setBal] = useState('')
  
-addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.decimals), faucetToken.img)
+  const[faucetAmount,setFaucetAmount]=useState(null)
+  const{TEST_TOKEN_CONTRACT_INSTANCE,fetchBalance}=useContext(ContractInstances)
+ 
+  const[isFaucet,setFaucet]=useState(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bal = await fetchBalance(faucetToken.address);
+        setBal(Number(roundToTwoDecimalPlaces(bal)))
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
+  }, [faucetToken, address]);
+  
+
+   
+const AddToMetamask=async()=>{
+
+  addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.decimals), faucetToken.img)
 
 
 }
@@ -41,10 +61,14 @@ addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.d
   }
 }
   return (
+
 <>
-<div className="faucetBox w3-margin-left w3-margin-right w3-display-middle w3-margin-right" style={{}}>
+
+<div className='w3-display-middle'>
+<div className="faucetBox"  >
         <div className="tradeBoxHeader">
           <h4 style={{color:"white",fontWeight:"bolder",fontSize:"18px"}}>Faucet</h4>
+          <h4 style={{color:"white",fontWeight:"bolder",fontSize:"14px"}} className='w3-right'>MAX. ALLOCATION : 100</h4>
           
         </div>
         <div className="inputs">
@@ -61,11 +85,16 @@ addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.d
           <div className="assetOnes"  >
           <FaucetModal/>
           </div>
-
-         
+       
+          <div className="assetSecond"  >
+    { address && !isNaN(Bal) &&  (<p style={{color: "#5f6783"}}>Bal : {Bal} {faucetToken.ticker} </p>) }
+          </div>
+   
           
           
         </div>
+
+
         
         <Button loading={isFaucet ? true : false} disabled={!faucetAmount || !address}  className="faucetBtn w3-border-0" onClick={getFaucet} >{isFaucet ? 'Getting Faucet' : 'Get Faucet'}</Button>
         <Button  style={{marginBottom:"9px"}} className="faucetBtn w3-border-0" onClick={AddToMetamask} >Add to Metamask</Button>
@@ -73,10 +102,12 @@ addTokenToMetamask(faucetToken.address, faucetToken.ticker, Number(faucetToken.d
 
       </div> 
 
-
+      </div>
+      
 
 
 </>
+
     
  // DAI/USDT     998550000000000000
 

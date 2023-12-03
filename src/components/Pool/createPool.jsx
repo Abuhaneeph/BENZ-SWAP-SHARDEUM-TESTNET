@@ -1,9 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import './Pool.css'
 import {Input} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-
+import { ContractInstances } from '../../../ContextProvider/ContractInstanceProvider'
 const CreatePool = () => {
+const{SWAP_CONTRACT_INSTANCE}=useContext(ContractInstances)
+const[isCreatePool,setCreatePool]=useState(false)
+  const CREATE_POOL= async() =>{
+    try{
+   
+       const SWAP_CONTRACT=await SWAP_CONTRACT_INSTANCE()
+        const creatingPool =await SWAP_CONTRACT.createPool(poolAddress.poolAddress1,poolAddress.poolAddress2);
+        setCreatePool(true) 
+        console.log(`Loading - ${creatingPool.hash}`);
+             await creatingPool.wait();
+             console.log(`Success - ${creatingPool.hash}`);
+             setCreatePool(false);
+    }catch(error){
+     setCreatePool(false);
+   console.log(error)
+  }
+
+  }
 
     const[poolAddress,setPoolAddress]=useState({
       poolAddress1: '',
@@ -61,7 +79,7 @@ const CreatePool = () => {
           
         </div>
         
-        <button  className="PoolBtn w3-border-0" disabled={!poolAddress.poolAddress1 || !poolAddress.poolAddress2}>Create Pool</button>
+        <button onClick={CREATE_POOL} loading={isCreatePool ? true : false}  className="PoolBtn w3-border-0" disabled={!poolAddress.poolAddress1 || !poolAddress.poolAddress2}>{isCreatePool ? 'Creating Pool' : 'Create Pool'}</button>
       </div> 
 
 

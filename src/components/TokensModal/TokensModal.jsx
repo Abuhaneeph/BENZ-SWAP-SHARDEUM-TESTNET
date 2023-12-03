@@ -1,11 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import Modal from 'antd/es/modal/Modal';
 
   import {DownOutlined } from  "@ant-design/icons";
 import { UserContext2 } from '../../../ContextProvider/ContextProvider2';
-import TokenList from '../../TokenList/tokenList';
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
+
 const TokensModal = ({color}) => {
+  const {TokenList} = useTokenService()
   const{openTokenModal,modifyToken,isOpenTokensModal,setOpenTokensModal,Token}=useContext(UserContext2)
+  
+  
+
 
   
     return (

@@ -12,7 +12,7 @@ const P2PIndex = () => {
         setPlaceP2PTrade(false);
       };
   return (
-    <div className='w3-display-middle'>
+    <div>
 
    <P2PTab handlePlaceTradeClick={handlePlaceTradeClick} handleRemovePlaceTradeClick={handleRemovePlaceTradeClick}  />
   {isPlaceP2PTrade ? <P2PHome/> : <RemoveP2PTrade/>  }

@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react'
+import React, { useState,useContext,useEffect } from 'react'
 import {
 
   PlusOutlined,
@@ -10,21 +10,37 @@ import {Input, Popover, Button, List } from "antd";
 import P2P from './P2P';
 import { ethers } from 'ethers';
 import { UserContext2 } from '../../../ContextProvider/ContextProvider2';
-import TokenList from '../../TokenList/tokenList';
+
 import SelectChoice from './SelectChoice';
-import { P2P_ADDRESS } from '../../../const/Contract/Contract_Addresses';
+
 import ToastMsg from './ToastMsg';
 import { ContractInstances } from '../../../ContextProvider/ContractInstanceProvider';
-
-
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
+import { roundToTwoDecimalPlaces } from '../../../utils/constants';
 const P2PHome = () => {
-  const{TEST_TOKEN_CONTRACT_INSTANCE,P2P_CONTRACT_INSTANCE}=useContext(ContractInstances)
+  const {TokenList,p2pAddress} = useTokenService()
+  const{TEST_TOKEN_CONTRACT_INSTANCE,P2P_CONTRACT_INSTANCE,fetchBalance}=useContext(ContractInstances)
   const{peerToken,selectedValues} = useContext(UserContext2)
 
   const address = useAddress()
+  const[Bal,setBal] = useState(null)
   const[TokenAmount,setTokenAmount]=useState(null)
    const[isCreating,setIsCreating] =useState(false)
    const[isApproving,setIsApproving]=useState(false)
+   const[hasApproved,setHasApproved] =useState(false)
+
+   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bal = await fetchBalance(peerToken.address);
+        setBal(Number(roundToTwoDecimalPlaces(bal)))
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
+  }, [peerToken, address]);
 
 
 // Initialize an array to store matching addresses
@@ -47,7 +63,7 @@ const  getSellerID =async()=>{
    const seller_ID=Number(Seller_ID)
     
      
-      const id=`Your Lisiting ID is ${seller_ID}`;
+      const id=`Your Listing ID is ${seller_ID}`;
      
         toast.success(id, {
           position: "top-right",
@@ -68,17 +84,18 @@ const ApproveToken=async()=>{
   const TokenAmountInWei = ethers.utils.parseEther(TokenAmount);
  
    const TEST_TOKEN_CONTRACT= await TEST_TOKEN_CONTRACT_INSTANCE(peerToken.address);  
-  const approveSpending =await TEST_TOKEN_CONTRACT.approve(P2P_ADDRESS,TokenAmountInWei);
+  const approveSpending =await TEST_TOKEN_CONTRACT.approve(p2pAddress,TokenAmountInWei);
 
   setIsApproving(true) 
   console.log(`Loading - ${approveSpending.hash}`);
        await approveSpending.wait();
        console.log(`Success - ${approveSpending.hash}`);
     setIsApproving(false)
-
+  setHasApproved(true)
 }
 
 const createListing=async()=>{
+
 
   // Specify the amount of Ether to send (in Wei)
 const TokenAmountInWei = ethers.utils.parseEther(TokenAmount);
@@ -149,10 +166,10 @@ console.log(error)
   return (
     <>
  
-    <div className="peerBox w3-margin " style={{marginTop:"20px"}}>
+    <div className="peerBox" style={{marginTop:"20px"}}>
         <div className="tradeBoxHeader">
           <h4 style={{color:"white",fontWeight:"bolder",fontSize:"18px"}}>Peer-2-Peer</h4>
-          
+          <h4 style={{color:"white",fontWeight:"bolder",fontSize:"18px"}}>MIN: 0.01</h4>
         </div>
         <div className="inputs">
           <Input
@@ -173,10 +190,13 @@ console.log(error)
           <P2P/>
           </div>
           
+          <div className="assetSecond"  >
+    { address && !isNaN(Bal) && (  <p style={{color: "#5f6783"}}>Bal : {Bal} {peerToken.ticker} </p>) }
+          </div>
           
           
         </div>
-        {peerToken.address != TokenList[0].address && <Button loading={isApproving ? true : false} className="swapButton w3-border-0" onClick={ApproveToken} disabled={!address || !TokenAmount || !peerToken || !selectedValues} >{isApproving ? 'Approving Token' : 'Approve'}</Button> }
+        {!hasApproved && peerToken.address != TokenList[0].address && (<Button loading={isApproving ? true : false} className="swapButton w3-border-0" onClick={ApproveToken} disabled={!address || !TokenAmount || !peerToken || !selectedValues} >{isApproving ? 'Approving Token' : 'Approve'}</Button>) }
       <Button style={{marginTop:"5px",marginBottom:"9px"}} className="swapButton w3-border-0" loading={isCreating ? true : false} onClick={createListing} disabled={!TokenAmount || !peerToken || !selectedValues || !address}>{isCreating ? 'Creating P2P Trade' : 'Create P2P Trade'}</Button> 
       
     

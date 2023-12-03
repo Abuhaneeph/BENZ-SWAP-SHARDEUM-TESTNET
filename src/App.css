@@ -111,6 +111,7 @@ header {
     display: flex;
     flex-direction: column;
     
+    
     padding-left: 30px;
     padding-right: 30px;
   }
@@ -132,7 +133,7 @@ header {
     background-color: #3a4157;
     height: 30px;
    
-    top: 36px;
+    top: 25px;
     right: 10px;
     border-radius: 100px;
     display: flex;
@@ -143,6 +144,95 @@ header {
     font-size: 17px;
     padding-right: 8px;
   }
+  .rateAssetOne {
+    position: absolute;
+  
+    
+   
+    top: 70px;
+    left: 10px;
+    
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  gap: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    padding-right: 8px;
+  }
+  .HeadOne {
+    position: absolute;
+  
+    
+   
+    top: 2px;
+    left: 10px;
+    
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  gap: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    padding-right: 8px;
+  }
+  .assetSecond {
+    position: absolute;
+    
+    height: 30px;
+   
+    top: 59px;
+    right: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
+  .HeadTwo {
+    position: absolute;
+    min-width: 90px;
+    height: 30px;
+    
+    top: 100px;
+    left: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
+  .baseEstimate {
+    background-color: #1f2639 !important;
+    color: white !important;
+    border-width: 0px !important;
+    height: 40px !important;
+    margin-bottom: 5px;
+    border-radius: 12px !important;
+  }
+  .assetThird {
+    position: absolute;
+    min-width: 90px;
+    height: 30px;
+    
+    top: 160px;
+    right: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
+
   
   
   .tradeBoxHeader {
@@ -216,13 +306,13 @@ header {
    margin-top: 80px;;
   }
   
-  .assetTwo {
+  .swapAssetTwo {
     position: absolute;
     min-width: 90px;
     height: 30px;
     background-color: #3a4157;
-    top: 135px;
-    right: 20px;
+    top: 130px;
+    right: 10px;
     border-radius: 100px;
     display: flex;
     justify-content: flex-start;
@@ -233,6 +323,54 @@ header {
     padding-right: 8px;
   }
   
+  .assetTwo {
+    position: absolute;
+    min-width: 50px;
+    height: 30px;
+    background-color: #3a4157;
+    top: 130px;
+    right: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
+  .poolOne {
+    position: absolute;
+    min-width: 50px;
+    height: 30px;
+    
+    top: 7px;
+    left: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
+  .poolTwo {
+    position: absolute;
+    min-width: 50px;
+    height: 30px;
+    
+    top: 110px;
+    left: 10px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    padding-right: 8px;
+  }
   .assetOne:hover{
     cursor: pointer;
   }
@@ -407,6 +545,16 @@ header {
     font-size: 35px;
     border-radius: 12px !important;
   }
+  .st {
+    background-color: #1f2639 !important;
+    color: white !important;
+    border-width: 0px !important;
+    height: 96px !important;
+    margin-bottom: 5px;
+    font-size: 35px;
+    border-radius: 12px !important;
+  }
+
 
   .choices {
     background-color: #1f2639 !important;

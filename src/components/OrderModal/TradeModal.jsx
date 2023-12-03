@@ -1,19 +1,18 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import {
   ArrowDownOutlined,
   DownOutlined
 } from "@ant-design/icons";
 import SelectList from './Select';
 import {Input,  Modal ,Button } from "antd";
-import TokenList from '../../TokenList/tokenList';
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import { ethers } from 'ethers';
 import { ContractInstances } from '../../../ContextProvider/ContractInstanceProvider';
 import { UserContext } from '../../../ContextProvider/ContextProvider';
-import { P2P_ADDRESS } from '../../../const/Contract/Contract_Addresses';
 import { toWei } from '../../../utils/constants';
 const TradeModal = ({amount,Metadata,sellerToken,id}) => {
-   
-    const{P2P_CONTRACT_INSTANCE, TEST_TOKEN_CONTRACT_INSTANCE }=useContext(ContractInstances);
+  const {TokenList,p2pAddress} = useTokenService()
+    const{P2P_CONTRACT_INSTANCE, TEST_TOKEN_CONTRACT_INSTANCE,SWAP_CONTRACT_INSTANCE }=useContext(ContractInstances);
     
 const[isEstimating,setEstimating]=useState(false)
   const[isOpenBuyerModal,setIsOpenBuyerModal]=useState(false)
@@ -21,12 +20,51 @@ const[isEstimating,setEstimating]=useState(false)
   const [tokenTwo, setTokenTwo] = useState(TokenList[1]);
   const [tokenOneAmount, setTokenOneAmount] = useState(amount);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
-  const[tokenTwoAmountToString,setTokenTwoAmountToString]=useState('')
+  const[tokenTwoAmountRate,setTokenTwoRate]=useState('')
   const [prices, setPrices] = useState(null);
    const[isTrading,setTrading] = useState(false)
-   const[isApprovingSpending,setApprovingSpending]=useState(false)
+   
    const[isApprove,setApprove]=useState(false)
+   const[token1Wei,setToken1Wei]=useState(false)
+   const[hasApproved,setHasApproved]=useState(false)
   const{isOpenModal,setOpenModal} = useContext(UserContext)
+  const calculateAmountTwo = async () => {
+    
+    if (tokenOneAmount!== null) {
+      const SWAP_CONTRACT = await SWAP_CONTRACT_INSTANCE();
+      const TokenAmountInWei = ethers.utils.parseEther(tokenOneAmount);
+      setToken1Wei(TokenAmountInWei)
+      setEstimating(true);
+    
+      try {
+        const rate = await SWAP_CONTRACT.estimate(
+          sellerToken,
+          tokenTwo.address,
+          TokenAmountInWei
+        );
+        setTokenTwoRate(rate)
+        console.log(rate)
+        const formattedRate = ethers.utils.formatEther(rate);
+       
+        setTokenTwoAmount(Number(formattedRate));
+      } catch (error) {
+        console.error(error);
+        setTokenTwoAmount(null);
+      } finally {
+        setEstimating(false);
+      }
+    } else {
+      // If amount1 is null, set amount2 to null
+      setTokenTwoAmount(null);
+      setEstimating(false);
+    }
+  };
+
+  useEffect(() => {
+    calculateAmountTwo();
+  }, [tokenOneAmount, SWAP_CONTRACT_INSTANCE, tokenTwo,  setTokenTwoAmount, setEstimating]);
+
+
   function changeAmount(e) {
     setTokenOneAmount(e.target.value);
     if(e.target.value && prices){
@@ -59,22 +97,7 @@ setOpenModal(true)
    
 
   
-const estimate = async() =>{
- const P2P_CONTRACT=await P2P_CONTRACT_INSTANCE();
- const TokenAmountInWei = ethers.utils.parseEther(tokenOneAmount);
- const estimatePrice =await P2P_CONTRACT.estimate(sellerToken,tokenTwo.address,TokenAmountInWei) 
- setEstimating(true) 
- console.log(`Loading - ${estimatePrice.hash}`);
-      await estimatePrice.wait();
-      console.log(`Success - ${estimatePrice.hash}`);
-      setEstimating(false);
-     const rate = await P2P_CONTRACT.rate();
-    setTokenTwoAmountToString(rate)
-     const formattedRate=ethers.utils.formatEther(rate);
-      setTokenTwoAmount(Number(formattedRate));
-      setApprovingSpending(true)
-      
-}
+
 
 const ApproveToken=async()=>{
 
@@ -85,14 +108,14 @@ const ApproveToken=async()=>{
  
   
    const TEST_TOKEN_CONTRACT= await TEST_TOKEN_CONTRACT_INSTANCE(tokenTwo.address);  
-  const approveSpending =await TEST_TOKEN_CONTRACT.approve(P2P_ADDRESS,tokenTwoAmountToString);
+  const approveSpending =await TEST_TOKEN_CONTRACT.approve(p2pAddress,tokenTwoAmountRate);
 
   setApprove(true) 
   console.log(`Loading - ${approveSpending.hash}`);
        await approveSpending.wait();
        console.log(`Success - ${approveSpending.hash}`);
     setApprove(false)
-    
+    setHasApproved(true)
     
 
 }
@@ -102,12 +125,12 @@ const executeTrade=async()=>{
   try{ 
     
 
-    console.log(tokenTwoAmountToString)
+    
   
     
     const P2P_CONTRACT=await P2P_CONTRACT_INSTANCE()
      const executeTrade =await P2P_CONTRACT.executeTokenPurchase(id, tokenTwo.address,{
-        value: tokenTwoAmountToString
+        value: tokenTwoAmountRate
 
      });
      console.log(`Loading - ${executeTrade.hash}`);
@@ -116,7 +139,8 @@ const executeTrade=async()=>{
           await executeTrade.wait();
           console.log(`Success - ${executeTrade.hash}`);
         setTrading(false);
-        
+        setOpenModal(false);
+        window.location.reload();
          
 
  }catch(error){
@@ -135,6 +159,7 @@ console.log(error)
           console.log(`Success - ${executeTrade.hash}`);
           setTrading(false);
           setOpenModal(false);
+          window.location.reload();
           
 
  }catch(error){
@@ -144,8 +169,8 @@ console.log(error)
   
 }
 
-setOpenModal(false)
-window.location.reload();
+
+
 }
 
   
@@ -203,8 +228,8 @@ onCancel={() => setOpenModal(false)}
             disabled={!prices}
             className='w3-left'
           />
-          <Input placeholder="0" value={tokenTwoAmount} disabled={true} />
-          <div className="switchButton" >
+          <Input placeholder="0" value={tokenTwoAmount} disabled={true}  />
+          <div className="switchButton"  >
             <ArrowDownOutlined className="switchArrow" />
           </div>
 
@@ -221,10 +246,8 @@ onCancel={() => setOpenModal(false)}
             <DownOutlined />
           </div>
         </div>
-   {isApprovingSpending && tokenTwo.address != TokenList[0].address   ? 
-      (<Button className="estimateBtn w3-border-0" loading={isApprove ? true : false} onClick={ApproveToken} disabled={!tokenOneAmount}>{isApprove ? 'Approving Token' : 'Approve'}</Button>)
-       :
-   (<Button className="estimateBtn w3-border-0" loading={isEstimating ? true : false} onClick={estimate} disabled={!tokenOneAmount}>{isEstimating ? 'Estimating Price' : 'Estimate'}</Button>)}
+   {tokenTwo.address != TokenList[0].address && !hasApproved   && 
+      (<Button className="estimateBtn w3-border-0" loading={isApprove ? true : false} onClick={ApproveToken} disabled={!tokenOneAmount}>{isApprove ? 'Approving Token' : 'Approve'}</Button>)}
         
     <Button loading={isTrading ? true : false} className="swapButton w3-border-0" onClick={executeTrade} disabled={!tokenOneAmount}>{isTrading ? 'Trading...' : 'Trade'}</Button>
       </div>

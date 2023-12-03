@@ -1,10 +1,9 @@
-import React,{useContext, useState,useEffect} from 'react'
+import React from 'react'
 import BuyCard from '../Buy/BuyCard'
 import EmptyList from './EmptyList'
 const OrderList = ({sellerLists,handleClick}) => {
   
-  
-
+ 
   return (
 <>
 

@@ -3,7 +3,7 @@ import Modal from 'antd/es/modal/Modal'
 import {
   DownOutlined, 
 } from "@ant-design/icons";
-import TokenList from '../../TokenList/tokenList'
+
 import { UserContext } from '../../../ContextProvider/ContextProvider';
 
 const LiquidityAmount2Modal = () => {

@@ -1,26 +1,30 @@
 import React, {useContext,useEffect, useState} from 'react'
 import { UserContext } from '../../../ContextProvider/ContextProvider';
 import TradeModal from '../OrderModal/TradeModal';
-import TokenList from '../../TokenList/tokenList';
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import { shortenAddress } from '../../../utils/constants';
 import { findTickerByAddress } from '../../../utils/constants';
 import { getMatchedTokenData } from '../../../utils/constants';
 import { timeAgo } from '../../../utils/constants';
 
 const BuyCard = ({timestamp,id,amount,address,img,onAction,desiredTokens,sellerToken}) => {
-
+  const {TokenList} = useTokenService()
       const{getOrdersNumbers}= useContext(UserContext)
       const[ordersNo,setOrdersNo]=useState(0)
       const[soldOrdersNo,setSoldOrdersNo]=useState(0)
-      const Numbers = 0;
+    console.log(TokenList,sellerToken)
+    const add = findTickerByAddress(TokenList,sellerToken)
+console.log(add)
 
+   
+      
       useEffect(() => {
 
         async function getListNo(){
-          const [NoOfOrders,NoOfSoldOrders] = await getOrdersNumbers();
+          const [NoOfOrders,soldOrders] = await getOrdersNumbers();
           
             setOrdersNo(Number(NoOfOrders))
-            setSoldOrdersNo(Number(NoOfSoldOrders))
+            setSoldOrdersNo(Number(soldOrders))
 }
     getListNo()
         }
@@ -30,6 +34,7 @@ const BuyCard = ({timestamp,id,amount,address,img,onAction,desiredTokens,sellerT
 
     
   const matchedMetadata= getMatchedTokenData(TokenList,desiredTokens)
+
 
 return (
     <div style={{ background: '#1E1D2F', borderRadius: 14}} className='w3-margin-left' >
@@ -52,7 +57,7 @@ return (
     
      
       <div className='w3-container w3-left' style={{paddingTop:'9px',paddingBottom:'30px', color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '300', wordWrap: 'break-word'}}>Seller ID:  <span className='w3-margin' style={{color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{id}</span>  </div>
-      <div className='w3-container w3-right' style={{paddingTop:'9px',paddingBottom:'30px', color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '300', wordWrap: 'break-word'}}>Token:  <span className='w3-margin' style={{color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{findTickerByAddress(sellerToken)}</span>  </div>
+      <div className='w3-container w3-right' style={{paddingTop:'9px',paddingBottom:'30px', color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '300', wordWrap: 'break-word'}}>Token:  <span className='w3-margin' style={{color: 'white', fontSize: 16, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{findTickerByAddress(TokenList,sellerToken)}</span>  </div>
       <div className='w3-container w3-center  w3-block' >
       <button onClick={onAction}  style={{background: '#BFBFBF',borderRadius:"7px"}} className='w3-btn w3-block w3-margin-bottom'><span style={{fontFamily:'Rubik',color:"white",fontSize:'20px',fontWeight:'400px',wordWrap: 'break-word'}}  >Buy</span></button>
       </div>

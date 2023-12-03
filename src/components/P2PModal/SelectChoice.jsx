@@ -1,18 +1,19 @@
 import React, { useState,useContext } from 'react'
 import {Select,Space } from 'antd'
 
-import TokenList from '../../TokenList/tokenList';
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import { DownOutlined } from '@ant-design/icons';
 import { UserContext2 } from '../../../ContextProvider/ContextProvider2';
 
 const SelectChoice= (props) => {
+  const {TokenList} = useTokenService()
   const { Option } = Select;
 const{handleChange}=useContext(UserContext2)
   
 
 return (
     <Select
-    placeholderStyle={{backgroundColor:"red"}}
+    
     dropdownStyle={{ border: '1px solid #ccc' }}
     mode="multiple"
     style={{

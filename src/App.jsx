@@ -1,7 +1,4 @@
 import { useState,useEffect,useContext } from 'react';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Nav from './components/Navigation/Nav'
 import Header from './layouts/Header/Header';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from '../pages/Home/Home';
@@ -13,13 +10,17 @@ import Loading from './components/Loading/Loading';
 import { UserContext } from '../ContextProvider/ContextProvider';
 import LiquidityHome from '../pages/Liquidity/LiquidityHome';
 import Pool from '../pages/Pools/Pool';
-
+import { ContractInstances } from '../ContextProvider/ContractInstanceProvider';
+import { useChainId } from '@thirdweb-dev/react';
 import './App.css'
 function App() {
+  const{chainid}=useChainId
  const{loading,setLoading}=useContext(UserContext)
   const [isLoading, setIsLoading] = useState(true);
+  const[networkID,setNetworkID]=useState(null)
   
-  // Simulate loading delay
+
+
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);

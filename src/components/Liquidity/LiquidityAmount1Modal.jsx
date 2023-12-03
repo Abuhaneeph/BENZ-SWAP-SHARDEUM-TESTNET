@@ -1,13 +1,15 @@
-import React ,{useState,useContext}from 'react'
+import React ,{useContext}from 'react'
 import Modal from 'antd/es/modal/Modal'
 import {
  
   DownOutlined,
   
 } from "@ant-design/icons";
-import TokenList from '../../TokenList/tokenList'
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
+
 import { UserContext } from '../../../ContextProvider/ContextProvider';
 const LiquidityAmount1Modal = () => {
+  const {TokenList} = useTokenService()
     const{isLiquidity1,setOpenLiquidity1,modifyLiquidty1,openLiquidityModal,Token1}=useContext(UserContext)
   return (
     <div> 

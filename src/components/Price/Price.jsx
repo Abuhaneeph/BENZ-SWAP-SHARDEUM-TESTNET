@@ -1,9 +1,10 @@
 import React, {useState,useContext}from 'react'
 import PriceModal from './PriceModal'
 import {Input,Button} from 'antd'
-import TokenList from '../../TokenList/tokenList'
+import { useTokenService } from '../../../ContextProvider/TokensProvider'
 import { ContractInstances } from '../../../ContextProvider/ContractInstanceProvider'
 const Price = () => {
+  const {TokenList} = useTokenService()
     const{P2P_CONTRACT_INSTANCE} = useContext(ContractInstances)
     const [price,setPrice]=useState(null)
     const[isSettingPrice,setSettingPrice]=useState(false)

@@ -6,10 +6,11 @@ import { ContractInstances } from '../../ContextProvider/ContractInstanceProvide
 import { UserContext } from '../../ContextProvider/ContextProvider'
 import { UserContext2 } from '../../ContextProvider/ContextProvider2'
 import { findImgByAddress } from '../../utils/constants'
-import { timeAgo } from '../../utils/constants'
+import { useTokenService } from '../../ContextProvider/TokensProvider'
 import { ethers } from 'ethers'
-import Header from '../../src/layouts/Header/Header'
+
 const Home = () => {
+  const{TokenList}=useTokenService()
   const{Token} =useContext(UserContext2)
   const{setOpenModal}=useContext(UserContext)
   
@@ -20,7 +21,7 @@ const Home = () => {
    
   const CHOICE_TOKEN=Token.address;
 
-  const ImgUrl= findImgByAddress(CHOICE_TOKEN);
+  const ImgUrl= findImgByAddress(TokenList,CHOICE_TOKEN);
 
  const{ P2P_CONTRACT_INSTANCE}=useContext(ContractInstances)
   const {isFetchOrders}=useContext(UserContext)

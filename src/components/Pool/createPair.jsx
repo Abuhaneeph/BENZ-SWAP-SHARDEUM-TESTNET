@@ -4,12 +4,12 @@ import { ethers } from 'ethers'
 import { P2P_ABI } from '../../../const/ABI/P2P_ABI'
 import { useSigner } from '@thirdweb-dev/react'
 import { ContractInstances } from '../../../ContextProvider/ContractInstanceProvider'
-import { P2P_ADDRESS } from '../../../const/Contract/Contract_Addresses'
+import { PRICEAPI_ADDRESS } from '../../../const/Contract/Contract_Addresses'
 
 const CreatePair = () => {
   const[isLoadingPoolAddr,setLoadingPoolAddr]=useState(false)
   
-   const{P2P_CONTRACT_INSTANCE}=useContext(ContractInstances)
+   const{PRICEAPI_CONTRACT_INSTANCE}=useContext(ContractInstances)
  
    
  
@@ -18,7 +18,7 @@ const CreatePair = () => {
 
     const[createPair,setCreatePair]=useState({
         Address: '',
-        PairIndex: 0,
+        Price: 0,
       })
 
         
@@ -35,9 +35,10 @@ const CreatePair = () => {
       }
      const  createAddrPair = async() =>{
        try{
-         
-          const P2P_CONTRACT=await P2P_CONTRACT_INSTANCE()
-           const creatingPair =await P2P_CONTRACT.markTokenAsTradeable(createPair.Address,createPair.PairIndex);
+         const Address= [createPair.Address];
+         const Price= [createPair.Price];
+          const Price_API_CONTRACT=await PRICEAPI_CONTRACT_INSTANCE()
+           const creatingPair =await Price_API_CONTRACT.markTokenAsTradeable(Address,Price);
            setLoadingPoolAddr(true) 
            console.log(`Loading - ${creatingPair.hash}`);
                 await creatingPair.wait();
@@ -70,9 +71,9 @@ const CreatePair = () => {
           />
           
           <Input
-            name= "PairIndex"
-            placeholder="Pair Index"
-            value={createPair.PairIndex}
+            name= "Price"
+            placeholder="Price"
+            value={createPair.Price}
             onChange={onChangeEvent}
             
             

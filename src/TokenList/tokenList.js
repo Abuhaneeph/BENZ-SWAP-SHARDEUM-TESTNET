@@ -1,17 +1,31 @@
-const TokenList= [
 
-    {
-        "key": 0,
-        "ticker": "SHM",
-        "img": "https://chaindroporg.github.io/token-list/data/logo/Shardeum.png",
-        "name": "Shardeum",
-        "address": "0xBcb09bAEABA0d3Ff4604520d3610c06FF7f55ad9",
-        "decimals": 18,
-        "pool": ["LINK","DAI"]
-    },
+/*
+import React from 'react';
+import benz from './benz.png';
+import goerli from './goerli';
+import shardeum from './shardeum';
+import { useChainId } from '@thirdweb-dev/react';
+
+const TokenComp = () => {
+  const chain = useChainId();
+  
+  let TokenList = [];
+
+  if (chain === 8081) {
+    TokenList = shardeum;
+  } else {
+    TokenList = goerli;
+  }
+
+  return TokenList;
+};
+
+export default TokenComp;
+*/
+const FaucetList= [
     
     {
-        "key": 1,
+        "key": 0,
         "ticker": "LINK",
         "img": "https://cdn.moralis.io/eth/0x514910771af9ca656af840dff83e8264ecf986ca.png",
         "name": "Chainlink",
@@ -19,9 +33,9 @@ const TokenList= [
         "decimals": 18,
         "pool": ["NEAR","SHM"]
     },
-
+ 
     {
-        "key": 2,
+        "key": 1,
         "ticker": "DAI",
         "img": "https://cdn.moralis.io/eth/0x6b175474e89094c44da98b954eedeac495271d0f.png",
         "name": "Dai Stablecoin",
@@ -31,7 +45,7 @@ const TokenList= [
     },
 
     {
-        "key": 3,
+        "key": 2,
         "ticker": "NEAR",
         "img": "https://etherscan.io/token/images/near_32.png",
         "name": "NEAR",
@@ -43,7 +57,7 @@ const TokenList= [
    
   
     {
-        "key": 4,
+        "key": 3,
         "ticker": "COMP",
         "img": "https://etherscan.io/token/images/comp_32.png",
         "name": "Compound",
@@ -53,7 +67,7 @@ const TokenList= [
     },
     
     {
-        "key": 5,
+        "key": 4,
         "ticker": "TRX",
         "img": "https://etherscan.io/token/images/trontrx_32.png",
         "name": "TRON",
@@ -63,7 +77,7 @@ const TokenList= [
     },
     
     {
-        "key": 6,
+        "key": 5,
         "ticker": "AAVE",
         "img": "https://cdn.moralis.io/eth/0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9.png",
         "name": "AAVE",
@@ -71,10 +85,9 @@ const TokenList= [
         "decimals": 18,
         "pool": ["LINK","TRX"]
     },
-
     /*
     {
-        "key": 7,
+        "key": 6,
         "ticker": "SUSHI",
         "img": "https://cdn.moralis.io/eth/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2.png",
         "name": "SUSHI TOKEN",
@@ -89,4 +102,4 @@ const TokenList= [
 
 
 
-export default TokenList
+export default FaucetList

@@ -1,12 +1,14 @@
 import React ,{useState}from 'react'
 
 import { Select } from 'antd'
-import TokenList from '../../TokenList/tokenList'
+
+
 
 
 
 const SelectList = ({Metadata}) => {
-    const [tokenOne, setTokenOne] = useState(TokenList[0]);
+
+
    
 
    

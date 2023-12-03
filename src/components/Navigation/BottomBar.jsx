@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useContext} from 'react'
 import TokensModal from '../TokensModal/TokensModal'
 import shardeum from '../../assets/shardeum.webp'
 import { EllipsisOutlined } from '@ant-design/icons'
@@ -8,6 +8,7 @@ import { UserContext } from '../../../ContextProvider/ContextProvider'
 const BottomBar = () => {
    const{showDrawer} =useContext(UserContext)
   return (
+    
     <div className='w3-center'>
     <div className="w3-bottom w3-block w3-hide-large" >
    

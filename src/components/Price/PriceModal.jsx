@@ -1,9 +1,9 @@
 import React from 'react'
-import TokenList from '../../TokenList/tokenList';
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import {Modal} from 'antd'
 import { DownOutlined } from '@ant-design/icons';
 const PriceModal = ({priceToken,IsOpenPriceModal,setOpenPriceModal, openPriceModal,setPriceToken}) => {
- 
+  const {TokenList} = useTokenService()
  
     function modifyPriceToken(i){
         setPriceToken(TokenList[i]);

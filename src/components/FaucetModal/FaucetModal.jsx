@@ -1,17 +1,19 @@
-import React, { useState, useContext, useEffect} from 'react'
+import React, { useContext} from 'react'
 import Modal from 'antd/es/modal/Modal'
+
+
 import {
  
-  DownOutlined,
-  SettingOutlined,
+  DownOutlined
 } from "@ant-design/icons";
-import { useContract,useContractRead,useContractWrite } from '@thirdweb-dev/react';
-import FaucetList from '../../TokenList/faucetTokenList';
+
+
+import { useTokenService } from '../../../ContextProvider/TokensProvider';
 import { UserContext2 } from '../../../ContextProvider/ContextProvider2';
 
 const FaucetModal = () => {
 
-
+  const {TokenList} = useTokenService()
   
 const{faucetToken,isFaucetModal,setOpenFaucetModal,modifyFaucet,openFaucetModal}=useContext(UserContext2)
 
@@ -30,23 +32,25 @@ return (
      
     
       >
-        <div className="modalContent">
-          {FaucetList?.map((e, i) => {
-            return (
-              <div
-                className="tokenChoice"
-                key={i}
-                onClick={() => modifyFaucet(i)}
-              >
-                <img src={e.img} alt={e.ticker} className="tokenLogo" />
-                <div className="tokenChoiceNames">
-                  <div className="tokenName ">{e.name}</div>
-                  <div className="tokenTicker">{e.ticker}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+       <div className="modalContent">
+       {TokenList.slice(1).map((e, i) => {
+  return (
+    <div
+      className="tokenChoice"
+      key={i + 1}
+      onClick={() => modifyFaucet(i + 1)}
+    >
+      <img src={e.img} alt={e.ticker} className="tokenLogo" />
+      <div className="tokenChoiceNames">
+        <div className="tokenName">{e.name}</div>
+        <div className="tokenTicker">{e.ticker}</div>
+      </div>
+    </div>
+  );
+})}
+
+</div>
+
       </Modal>
 <div className=''  onClick={() => openFaucetModal()}>
     <img src={faucetToken.img} alt="assetOneLogo" className="assetLogo" style={{marginRight:"4px"}} />
