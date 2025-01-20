@@ -11,12 +11,14 @@ import { useTokenService } from "../../../ContextProvider/TokensProvider";
 import { ContractInstances } from "../../../ContextProvider/ContractInstanceProvider";
 import { useChainId,useAddress } from "@thirdweb-dev/react";
 import goerli from "../../TokenList/goerli";
+import zetachain from "../../TokenList/zetachain";
+import shardeum from '../../TokenList/shardeum';
 import { roundToTwoDecimalPlaces } from "../../../utils/constants";
 
 
 const SwapWidget = () => {
   const address =useAddress()
-  const {TokenList,swapAddress} = useTokenService()
+  const {TokenList,setTokenList,swapAddress} = useTokenService()
    const{SWAP_CONTRACT_INSTANCE,TEST_TOKEN_CONTRACT_INSTANCE,PRICEAPI_CONTRACT_INSTANCE,fetchBalance}=useContext(ContractInstances)
   const [slippage, setSlippage] = useState(2.5);
   const [token1Amount, setToken1Amount] = useState(null);
@@ -39,10 +41,17 @@ const SwapWidget = () => {
 const chainId = useChainId()
 
 useEffect(() => {
-   
-  // Update token list when chainId changes
-  const updatedTokenList = chainId === 8081 ? TokenList : goerli;
-  setToken1(updatedTokenList[0]); // Set a default token or adjust as needed
+  
+   if(chainId === 8081){
+       setTokenList(shardeum);
+   }else if(chainId === 5){
+    setTokenList(goerli);
+
+   }else if(chainId === 7001){
+     setTokenList(zetachain);
+   }
+
+
 
 }, [chainId, TokenList]);
 
@@ -60,10 +69,13 @@ useEffect(()=>{
       setBal1(roundedBal1)
       setBal2(roundedBal2)
       const PRICE_CONTRACT= await PRICEAPI_CONTRACT_INSTANCE();
-
+    
+  
       
       const dollarRate= await PRICE_CONTRACT.getTokenPrice(token1.address);
+    
       const formattedDollarRate= ethers.utils.formatEther(dollarRate)
+    
       setDollarRate(formattedDollarRate)
 
     } catch (error) {
@@ -73,45 +85,57 @@ useEffect(()=>{
 
   fetchData();
 
-},[token1,token2,address,Bal1,Bal2,dollarRate,setDollarRate])
+},[token1,token2,address,Bal1,Bal2,dollarRate,setDollarRate,chainId,PRICEAPI_CONTRACT_INSTANCE])
 
   
   const calculateAmount2 = async () => {
     if (token1Amount !== null) {
       setEstimatedAmount2(true);
-      const SWAP_CONTRACT = await SWAP_CONTRACT_INSTANCE();
+      const PRICE_CONTRACT = await PRICEAPI_CONTRACT_INSTANCE();
+      
       const TokenAmountInWei = ethers.utils.parseEther(token1Amount);
 
       
-      
-      setAmountOneInWei(TokenAmountInWei)
+     
       try {
-        const rate = await SWAP_CONTRACT.estimate(
+        const rate = await PRICE_CONTRACT.estimate(
           token1.address,
           token2.address,
           TokenAmountInWei
          
         );
+      
+        const f_rate=ethers.utils.formatEther(rate)
+
+        const swapFee= ((20/1000 * f_rate))
+      
+
+        const amountTwoToReceive = f_rate - swapFee
+       
+        
+        setToken2Amount(Number(amountTwoToReceive));
+        setAmountOneInWei(TokenAmountInWei);
+        ///======  ESTIMATING TWO TO ONE =====//
+        
         const Amount2InWei= ethers.utils.parseEther("1");
-        const rate2= await SWAP_CONTRACT.estimate(
+        const rateToExchangeTwotoOne= await PRICE_CONTRACT.estimate(
           token2.address,
           token1.address,
           Amount2InWei
 
         )
-        const f_rate2=ethers.utils.formatEther(rate2)
+        const formattedTwoRate = ethers.utils.formatEther(rateToExchangeTwotoOne);
 
-        const swapFee= ((20/1000 * f_rate2))
-
-        const amountToReceive = f_rate2 - swapFee
-
-       setBaseTwoRate(amountToReceive)
+        setBaseTwoRate(formattedTwoRate)
+        
+        setAmountTwoRate(rateToExchangeTwotoOne);
+        
+       
+       
        
         
-        setAmountTwoRate(rate);
-        const formattedRate = ethers.utils.formatEther(rate);
        
-        setToken2Amount(Number(formattedRate));
+        
 
       } catch (error) {
         console.error(error);
@@ -128,7 +152,7 @@ useEffect(()=>{
   
   useEffect(() => {
     calculateAmount2();
-  }, [SWAP_CONTRACT_INSTANCE, token1Amount,token1, token2,baseTwoRate,setAmountOneInWei,setBaseTwoRate,setToken2Amount, setAmountTwoRate, setEstimatedAmount2]);
+  }, [SWAP_CONTRACT_INSTANCE,PRICEAPI_CONTRACT_INSTANCE,token1Amount,token1, token2,baseTwoRate,setAmountOneInWei,setBaseTwoRate,setToken2Amount, setAmountTwoRate, setEstimatedAmount2,chainId]);
   
   const estimate = (e) => {
     const newValue = e.target.value;
@@ -228,6 +252,7 @@ useEffect(()=>{
 
  
    const SwapToken=async()=>{
+    
     if(token1.address == TokenList[0].address){
       try{
         const SWAP_CONTRACT= await SWAP_CONTRACT_INSTANCE();  
@@ -246,9 +271,7 @@ useEffect(()=>{
      }else if(token2.address == TokenList[0].address){
       try{
         const SWAP_CONTRACT= await SWAP_CONTRACT_INSTANCE();  
-       const SWAP =await SWAP_CONTRACT.swap(token1.address,token2.address,AmountOneInWei,{
-            value: AmountOneInWei
-       }); 
+       const SWAP =await SWAP_CONTRACT.swap(token1.address,token2.address,AmountOneInWei); 
        console.log(`Loading - ${SWAP.hash}`);
        setSwapping(true)
         await SWAP.wait();

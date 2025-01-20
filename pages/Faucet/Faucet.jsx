@@ -31,7 +31,7 @@ const Faucet = () => {
     };
   
     fetchData();
-  }, [faucetToken, address]);
+  }, [faucetToken, address,Bal]);
   
 
    

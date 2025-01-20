@@ -5,14 +5,16 @@ import { useSigner } from '@thirdweb-dev/react';
 import { shortenAddress } from '../utils/constants';
 import { useChainId,useAddress } from '@thirdweb-dev/react'; 
 import goerli from '../src/TokenList/goerli';
-import { G_P2P_ADDRESS , S_P2P_ADDRESS} from '../const/Contract/Contract_Addresses';
+import { G_P2P_ADDRESS , S_P2P_ADDRESS, Z_P2P_ADDRESS} from '../const/Contract/Contract_Addresses';
 import { P2P_ABI } from '../const/ABI/P2P_ABI';
+import zetachain from '../src/TokenList/zetachain';
+import shardeum from '../src/TokenList/shardeum';
 
 
 export const UserContext = createContext()
 
 const ContextProvider = ({children}) => {
-  const { TokenList: originalTokenList, setP2PAddress} = useTokenService();
+  const { TokenList: originalTokenList,setTokenList, setP2PAddress} = useTokenService();
   const{p2pAddress}=useTokenService()
   const chainId= useChainId()
   const signer = useSigner();
@@ -38,20 +40,24 @@ const ContextProvider = ({children}) => {
     if(!address){
       setToken1(originalTokenList[0])
     }else{
-      const updatedTokenList = chainId === 8081 ? originalTokenList : goerli;
-      setToken1(updatedTokenList[0]); // Set a default token or adjust as needed
-      setToken2(pairedPoolArrays[0])
+    
+      
       
       if (chainId === 8081) {
-        
+        setTokenList(shardeum);
         setP2PAddress(S_P2P_ADDRESS);
         
-      } else {
+      } else if( chainId === 5) {
+        setTokenList(goerli);
        
         setP2PAddress(G_P2P_ADDRESS);
      
+      }else if(chainId === 7001){
+      setTokenList(zetachain);
+           setP2PAddress(Z_P2P_ADDRESS);
       }
-      
+      setToken1(originalTokenList[0]); // Set a default token or adjust as needed
+      setToken2(pairedPoolArrays[0])
     }
    
       // Update token list when chainId changes
@@ -88,10 +94,14 @@ const ContextProvider = ({children}) => {
      
      
      function modifyLiquidty2(i){
-         setToken2(pairedPoolArrays[i]);
+          
+      setToken2(pairedPoolArrays[i])
+        //setToken2(pairedToken2List[i]);
+        
+        
          setOpenLiquidity2(false);
        }
- 
+
  
        const openLiquidityModal2=()=>{
          setOpenLiquidity2(true)

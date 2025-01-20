@@ -3,7 +3,9 @@ import benzPng from '../../assets/benzpng.png'
 import shardeum from '../../assets/shardeum.webp'
 import TokensModal from '../TokensModal/TokensModal';
 import ConnectBtn from '../ConnectBtn/ConnectBtn';
+import { useChainId } from '@thirdweb-dev/react'; 
 const TopBar = () => {
+  const chainID= useChainId()
   return (
     <div >
        <>
@@ -14,7 +16,16 @@ const TopBar = () => {
     <ConnectBtn />
     </div>
    
-    <img src={shardeum} width={90} height='auto' className='w3-right w3-hide-small  ' style={{marginTop:"30px",paddingRight:"18px"}} />
+    {chainID === 8081 && (
+  <img
+    src={shardeum}
+    width={90}
+    height='auto'
+    className='w3-right w3-hide-small'
+    style={{ marginTop: '30px', paddingRight: '18px' }}
+  />
+)}
+   
     <div className='w3-bar-item w3-right w3-hide-medium w3-hide-small ' style={{marginTop:"20px",paddingRight:"18px"}}>
    <TokensModal color='w3-text-white' />
   
